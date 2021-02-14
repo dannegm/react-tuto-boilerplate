@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { rgba } from 'polished';
+import colors from '../../ui/colors';
 
 export const NavWrapper = styled.nav`
     display: flex;
@@ -8,18 +10,18 @@ export const NavWrapper = styled.nav`
 
 export const Link = styled.a`
     display: block;
-    text-align: center;
-    padding: 0.5rem 1rem;
-    background: #444;
-    color: #fff;
+    color: ${rgba(colors.white, 0.5)};
+    font-size: 4rem;
+    font-weight: 600;
     text-decoration: none;
-    font-family: Arial, Helvetica, sans-serif;
-    text-transform: uppercase;
     transition: all ease .2s;
-    font-size: 0.8rem;
-    border-radius: .25rem;
 
     &:hover {
-        transform: scale(1.1);
+        transform: translateY(0.5rem);
+        color: ${colors.white};
     }
+
+    ${({ isActive }) => isActive && css`
+        color: ${colors.white};
+    `}
 `
