@@ -1,39 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import Shell from '../../shared/layout/Shell';
 
+import AutoComplete from '../../shared/components/AutoComplete';
 import BookItem from '../../shared/components/BookItem';
 
-import { sequence as ArraySequence } from '../../shared/utils/arrays';
+import { sequence } from '../../shared/utils/arrays';
+import { secondsToTimeFormat } from '../../shared/utils/strings';
+
+import useBookList from '../../state/hooks/useBookList';
 
 import {
+    Wrapper,
     Row,
+    Column,
+    ResultsHeader,
+    ResultsHeaderLabel,
 } from './Home.styled';
 
 const Home = () => {
+    const [query, setQuery] = useState('');
 
-    const mockData = ArraySequence(4).map(i => ({
-        id: nanoid(),
-        title: 'Lorem Ipsum',
-        duration: '00:00',
-        cover: 'https://cdn.shopify.com/s/files/1/0049/3351/7425/products/MoM_BoxTop_EN_3535x.jpg?v=1594402639',
-    }))
+    const { data, loading } = useBookList();
+
+    const handleChange = (event) => {
+        setQuery(event.target.value);
+    };
 
     return (
         <Shell>
-            <Row>
-                {
-                    mockData.map(book => (
-                        <BookItem
-                            key={book.id}
-                            title={book.title}
-                            duration={book.duration}
-                            cover={book.cover}
-                        />
-                    ))
-                }
-            </Row>
+            <Wrapper>
+                <Row>
+                    <Column>
+                        <AutoComplete value={query} onChange={handleChange} />
+                        <ResultsHeader>
+                            <ResultsHeaderLabel>
+                                Results for:
+                            </ResultsHeaderLabel>
+                            <ResultsHeaderLabel>
+                                <strong>{query}</strong>
+                            </ResultsHeaderLabel>
+                        </ResultsHeader>
+                    </Column>
+                </Row>
+
+                {loading === true && (
+                    <h1>Cargando....</h1>
+                )}
+
+                {loading === false && data !== null && (<Row>
+                    {
+                        data.items.map(item => {
+                            return (
+                                <BookItem
+                                    key={item.sys.id}
+                                    title={item.fields.title['es-MX']}
+                                    duration={secondsToTimeFormat(item.fields.duration['es-MX'])}
+                                    cover={item.fields.cover['es-MX']}
+                                />
+                            )
+                        })
+                    }
+                </Row>)}
+            </Wrapper>
         </Shell>
     );
 };

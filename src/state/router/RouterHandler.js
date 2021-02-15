@@ -17,9 +17,7 @@ const RouterHandler = () => (
                 {routes.map((route) => {
                     const { component, ...payload } = route;
                     return (
-                        <Route key={route.name} {...payload}>
-                            {component}
-                        </Route>
+                        <Route key={route.name} {...route} />
                     )
                 })}
                 <Route path='*'>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
     display: block;
-    padding: 2rem;
+    padding: 4rem;
 `;
 
 export const Page = styled.div`
